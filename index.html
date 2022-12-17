@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File names</title>
+</head>
+
+<body>
+
+    <form id="form">
+        <input type="text" id="input-title" name="title" required><br>
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+
+<script>
+
+    const form = document.getElementById('form');
+
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.textContent = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+    }
+
+    function validateForm(e) {
+        e.preventDefault();
+
+        const inputElement = document.getElementById('input-title');
+        let s = inputElement.value;
+
+        s = s.toLowerCase();
+        s = s.split(' ').slice(0, 5).join(' ');
+        s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        s = s.replace(/ /g, '-');
+        s = s.replace(/[^\w-]/g, '');
+
+        const divElement = document.createElement('div');
+        document.body.appendChild(divElement);
+        divElement.innerHTML = `<div>${s}</div><button onclick="copyToClipboard('${s}')">Copy</button>`;
+    }
+
+    form.addEventListener('submit', validateForm);
+
+</script>
+
+</html>
